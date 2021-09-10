@@ -1,20 +1,20 @@
-import { Box, ChakraProvider } from "@chakra-ui/react";
+import { About } from "components/organisms/About";
 import { TopView } from "components/organisms/TopView";
-
-// const theme = extendTheme({
-//   fonts: {
-//     heading: "righteous",
-//   },
-// });
+import styled from "styled-components";
 
 function App() {
   return (
-    <ChakraProvider>
-      <Box bg="#f2f2f2" w="100%" h="100vh">
-        <TopView />
-      </Box>
-    </ChakraProvider>
+    <SWrapBox>
+      <TopView />
+      <About />
+    </SWrapBox>
   );
 }
+
+const SWrapBox = styled.div`
+  background-color: #f2f2f2;
+  width: 100%;
+  position: relative;
+`;
 
 export default App;

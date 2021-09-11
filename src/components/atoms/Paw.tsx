@@ -1,14 +1,9 @@
 import { memo, VFC } from "react";
 import styled from "styled-components";
+import { PawType } from "types/pawType";
 
-type Props = {
-  top: number;
-  left: number;
-  displayFlag: boolean;
-};
-
-export const Paw: VFC<Props> = memo((props) => {
-  const { top, left, displayFlag } = props;
+export const Paw: VFC<PawType> = memo((props) => {
+  const { top, left, flag, angle } = props;
   return (
     <SSvg
       aria-hidden="true"
@@ -20,8 +15,9 @@ export const Paw: VFC<Props> = memo((props) => {
       viewBox="0 0 512 512"
       style={{
         top: `${top}vh`,
-        left: `calc(${left}% - 35px)`,
-        opacity: `${displayFlag ? 1 : 0}`,
+        left: `calc(50% - 30px + ${left}px)`,
+        opacity: `${flag ? 1 : 0}`,
+        transform: `translate(-50%, -50%) rotate(${angle}deg)`,
       }}
     >
       <path
@@ -34,7 +30,7 @@ export const Paw: VFC<Props> = memo((props) => {
 
 const SSvg = styled.svg`
   position: absolute;
-  width: 35px;
+  width: 30px;
   transition: opacity 0.8s;
   opacity: 0;
   transform: translate(-50%, -50%) rotate(180deg);

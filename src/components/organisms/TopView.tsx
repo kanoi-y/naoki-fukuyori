@@ -1,32 +1,11 @@
 import "@fontsource/righteous";
-import { Paw } from "components/atoms/Paw";
 import { memo, VFC } from "react";
 import styled from "styled-components";
 
 export const TopView: VFC = memo(() => {
-  // const [fadeFlag, setFadeFlag] = useState(false);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setFadeFlag(true);
-  //   }, 1000);
-  // }, []);
-  const pawArray = [
-    { top: 50, left: 50, flag: false },
-    { top: 58, left: 70, flag: false },
-    { top: 66, left: 50, flag: false },
-    { top: 74, left: 70, flag: false },
-    { top: 82, left: 50, flag: false },
-    { top: 90, left: 70, flag: false },
-  ];
-
   return (
     <SContainer>
       <STitle>Welcome</STitle>
-      {/* <SArrowImage src={AngleDoubleDown} fadeFlag={fadeFlag} /> */}
-      {pawArray.map((paw, i) => (
-        <Paw key={i} top={paw.top} left={paw.left} displayFlag={paw.flag} />
-      ))}
     </SContainer>
   );
 });

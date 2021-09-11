@@ -1,12 +1,15 @@
 import { About } from "components/organisms/About";
 import { TopView } from "components/organisms/TopView";
+import { PawLayout } from "components/templates/PawLayout";
 import styled from "styled-components";
 
 function App() {
   return (
     <SWrapBox>
-      <TopView />
-      <About />
+      <PawLayout>
+        <TopView />
+        <About />
+      </PawLayout>
     </SWrapBox>
   );
 }

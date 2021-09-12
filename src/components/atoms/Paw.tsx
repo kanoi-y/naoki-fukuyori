@@ -1,9 +1,12 @@
 import { memo, VFC } from "react";
 import styled from "styled-components";
-import { PawType } from "types/pawType";
 
-export const Paw: VFC<PawType> = memo((props) => {
-  const { top, left, flag, angle } = props;
+type Props = {
+  flag: boolean;
+};
+
+export const Paw: VFC<Props> = memo((props) => {
+  const { flag } = props;
   return (
     <SSvg
       aria-hidden="true"
@@ -14,10 +17,10 @@ export const Paw: VFC<PawType> = memo((props) => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
       style={{
-        top: `${top}vh`,
-        left: `calc(50% - 30px + ${left}px)`,
+        // top: `${top}vh`,
+        // left: `calc(50% + ${left}px)`,
         opacity: `${flag ? 1 : 0}`,
-        transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+        // transform: `translate(-50%, -50%) rotate(${angle}deg)`,
       }}
     >
       <path
@@ -29,9 +32,8 @@ export const Paw: VFC<PawType> = memo((props) => {
 });
 
 const SSvg = styled.svg`
-  position: absolute;
   width: 30px;
   transition: opacity 0.8s;
   opacity: 0;
-  transform: translate(-50%, -50%) rotate(180deg);
+  transform: translate(-50%, -50%);
 `;

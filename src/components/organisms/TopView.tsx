@@ -1,11 +1,47 @@
 import "@fontsource/righteous";
-import { memo, VFC } from "react";
+import { Footprints } from "components/molecules/Footprints";
+import { memo, useCallback, useEffect, useState, VFC } from "react";
 import styled from "styled-components";
 
 export const TopView: VFC = memo(() => {
+  const [pawArray, setPawArray] = useState<{ flag: boolean }[]>([
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+    { flag: false },
+  ]);
+
+  const displayPaw = useCallback(() => {
+    setTimeout(() => {
+      const pawIndex = pawArray.findIndex((paw) => paw.flag === false);
+
+      if (pawIndex === -1) return;
+      setPawArray([
+        ...pawArray.slice(0, pawIndex),
+        { flag: true },
+        ...pawArray.splice(pawIndex + 1),
+      ]);
+      console.log(pawArray);
+    }, 300);
+  }, [pawArray]);
+
+  useEffect(() => {
+    displayPaw();
+  }, [displayPaw]);
+
   return (
     <SContainer>
       <STitle>Welcome</STitle>
+      <Footprints pawArray={pawArray} top={-7} left={130} angle={-35} />
     </SContainer>
   );
 });
@@ -34,6 +70,8 @@ const STitle = styled.h2`
   font-family: Righteous;
   margin: 0;
   transform: translateY(-100%);
+  position: relative;
+  z-index: 50;
 `;
 
 // type ArrowImageType = {

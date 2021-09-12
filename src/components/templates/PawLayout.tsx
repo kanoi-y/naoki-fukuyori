@@ -1,132 +1,120 @@
-import { Paw } from "components/atoms/Paw";
-import { memo, ReactNode, useCallback, useEffect, useState, VFC } from "react";
-import { PawType } from "types/pawType";
+export const PawLayout = () => {
+  return <p></p>;
+}
 
-type Props = {
-  children: ReactNode;
-};
+// import { Paw } from "components/atoms/Paw";
+// import { memo, ReactNode, useCallback, useState, VFC } from "react";
+// import { PawType } from "types/pawType";
 
-export const PawLayout: VFC<Props> = memo((props) => {
-  const { children } = props;
+// type Props = {
+//   children: ReactNode;
+// };
 
-  const [pawArray, setPawArray] = useState<PawType[]>([]);
-  const [pawCount, setPawCount] = useState(1);
-  const [lastAngle, setLastAngle] = useState<PawType["angle"]>(180);
-  const [lastLeft, setLastLeft] = useState<PawType["left"]>(0);
+// export const PawLayout: VFC<Props> = memo((props) => {
+//   const { children } = props;
 
-  const scrollDisplayPaw = useCallback(() => {
-    const scrollTop = window.pageYOffset;
+//   const [pawArray, setPawArray] = useState<PawType[]>([]);
+//   // const [pawCount, setPawCount] = useState(1);
+//   const [lastAngle, setLastAngle] = useState<PawType["angle"]>(180);
+//   const [lastLeftRight, setLastLeftRight] = useState<PawType["left"]>(0);
+//   const [lastLeftLeft, setLastLeftLeft] = useState<PawType["left"]>(70);
 
-    if (scrollTop < 50) return;
+//   const scrollDisplayPaw = useCallback(() => {
+//     const scrollTop = window.pageYOffset;
 
-    const parity = pawCount % 2 === 0 ? "左足" : "右足";
-    const top = 50 + (pawCount - 1) * 8;
-    console.log(scrollTop)
+//     if (scrollTop < 50) return;
 
-    // ピッタリではなくても大丈夫なようにする
+//     const pawCount = Math.floor((scrollTop - 50) / 8) + 1;
 
-    if (scrollTop < top) return;
-    console.log("OK")
+//     // pawの許容量が現在のpawArrayより上回った時に下の処理を実行する
+//     if (pawCount <= pawArray.length) return;
+//     console.log(pawArray);
 
-    let angle: PawType["angle"];
-    let left: PawType["left"];
+//     const parity = pawCount % 2 === 0 ? "左足" : "右足";
+//     const top = 50 + (pawCount - 1) * 8;
 
-    if (parity === "左足") {
-      if (lastAngle === 135) {
-        angle = Math.floor(Math.random() * 2) + 1 === 1 ? 135 : 180;
-        left = lastLeft + 35;
-      } else if (lastAngle === 180) {
-        angle = Math.floor(Math.random() * 2) + 1 === 1 ? 135 : 180;
-        left = lastLeft + 70;
-      } else {
-        angle = lastAngle;
-        left = lastLeft + 105;
-      }
-    } else {
-      if (lastAngle === 135) {
-        angle = lastAngle;
-        left = lastLeft - 35;
-      } else if (lastAngle === 180) {
-        angle = Math.floor(Math.random() * 2) + 1 === 1 ? 225 : 180;
-        left = lastLeft;
-      } else {
-        angle = Math.floor(Math.random() * 2) + 1 === 1 ? 225 : 180;
-        left = lastLeft + 35;
-      }
-    }
+//     let angle: PawType["angle"];
+//     let left: PawType["left"];
 
-    setPawArray([...pawArray, { top, left, angle, flag: false }]);
-    setTimeout(() => {
-      const newPawArray = pawArray.map((paw, i) => {
-        if (i !== pawArray.length - 1) return paw;
-        const newPaw: PawType = {
-          top: paw.top,
-          left: paw.left,
-          angle: paw.angle,
-          flag: true,
-        };
-        return newPaw;
-      });
-      setPawArray(newPawArray);
-    }, 1);
+//     if (parity === "左足") {
+//       if (lastAngle === 225) {
+//         angle = Math.floor(Math.random() * 2) + 1 === 1 ? 225 : 180;
+//         left = lastLeftLeft - 35;
+//       } else if (lastAngle === 180) {
+//         angle = Math.floor(Math.random() * 2) + 1 === 1 ? 225 : 180;
+//         left = lastLeftLeft;
+//       } else {
+//         angle = lastAngle;
+//         left = lastLeftLeft + 35;
+//       }
+//     } else {
+//       if (lastAngle === 225) {
+//         angle = lastAngle;
+//         left = lastLeftRight - 35;
+//       } else if (lastAngle === 180) {
+//         angle = Math.floor(Math.random() * 2) + 1 === 1 ? 135 : 180;
+//         left = lastLeftRight;
+//       } else {
+//         angle = Math.floor(Math.random() * 2) + 1 === 1 ? 135 : 180;
+//         left = lastLeftRight + 35;
+//       }
+//     }
 
-    setPawCount(pawCount + 1);
-    setLastAngle(angle);
-    setLastLeft(left);
+//     setPawArray([...pawArray, { top, left, angle, flag: true }]);
+//     // setTimeout(() => {
+//     //   const newPawArray = pawArray.map((paw, i) => {
+//     //     if (i !== pawArray.length - 1) return paw;
+//     //     const newPaw: PawType = {
+//     //       top: paw.top,
+//     //       left: paw.left,
+//     //       angle: paw.angle,
+//     //       flag: true,
+//     //     };
+//     //     return newPaw;
+//     //   });
+//     //   setPawArray(newPawArray);
+//     // }, 1);
 
-    // const newPawArray = pawArray.map((paw) => {
-    //   if (paw.top - scrollTop <= 0) {
-    //     const newPaw: PawType = {
-    //       top: paw.top,
-    //       left: paw.left,
-    //       angle: 180,
-    //       flag: true,
-    //     };
-    //     return newPaw;
-    //   } else {
-    //     const newPaw: PawType = {
-    //       top: paw.top,
-    //       left: paw.left,
-    //       angle: 180,
-    //       flag: false,
-    //     };
-    //     return newPaw;
-    //   }
-    // });
-    // setPawArray(newPawArray);
-  }, [pawArray, pawCount, lastAngle, lastLeft]);
+//     setLastAngle(angle);
+//     if (parity === "左足") {
+//       setLastLeftLeft(left);
+//     } else {
+//       setLastLeftRight(left);
+//     }
+//     // setPawCount(pawCount + 1);
+//   }, [pawArray, lastAngle, lastLeftLeft, lastLeftRight]);
 
-  // useEffect(() => {
-  //   setPawArray([
-  //     { top: 50, left: 0, angle: 180, flag: false },
-  //     { top: 58, left: 70, angle: 180, flag: false },
-  //     { top: 66, left: 0, angle: 180, flag: false },
-  //     { top: 74, left: 70, angle: 180, flag: false },
-  //     { top: 82, left: 0, angle: 180, flag: false },
-  //     { top: 90, left: 70, angle: 180, flag: false },
-  //     { top: 98, left: 0, angle: 180, flag: false },
-  //   ]);
-  // }, []);
+//   // useEffect(() => {
+//   //   setPawArray([
+//   //     { top: 50, left: 0, angle: 180, flag: false },
+//   //     { top: 58, left: 70, angle: 180, flag: false },
+//   //     { top: 66, left: 0, angle: 180, flag: false },
+//   //     { top: 74, left: 70, angle: 180, flag: false },
+//   //     { top: 82, left: 0, angle: 180, flag: false },
+//   //     { top: 90, left: 70, angle: 180, flag: false },
+//   //     { top: 98, left: 0, angle: 180, flag: false },
+//   //   ]);
+//   // }, []);
 
-  useEffect(() => {
-    document.addEventListener("scroll", scrollDisplayPaw, { passive: true });
-    return () => {
-      document.removeEventListener("scroll", scrollDisplayPaw);
-    };
-  }, [scrollDisplayPaw]);
+//   // useEffect(() => {
+//   //   document.addEventListener("scroll", scrollDisplayPaw, { passive: true });
+//   //   return () => {
+//   //     document.removeEventListener("scroll", scrollDisplayPaw);
+//   //   };
+//   // }, [scrollDisplayPaw]);
 
-  return (
-    <div>
-      {children}
-      {pawArray.map((paw, i) => (
-        <Paw
-          key={i}
-          top={paw.top}
-          left={paw.left}
-          angle={paw.angle}
-          flag={paw.flag}
-        />
-      ))}
-    </div>
-  );
-});
+//   return (
+//     <div>
+//       {children}
+//       {pawArray.map((paw, i) => (
+//         <Paw
+//           key={i}
+//           top={paw.top}
+//           left={paw.left}
+//           angle={paw.angle}
+//           flag={paw.flag}
+//         />
+//       ))}
+//     </div>
+//   );
+// });

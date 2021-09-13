@@ -19,20 +19,27 @@ export const TopView: VFC = memo(() => {
     { flag: false },
     { flag: false },
   ]);
+  const [pawIndex, setPawIndex] = useState(0);
 
   const displayPaw = useCallback(() => {
     setTimeout(() => {
-      const pawIndex = pawArray.findIndex((paw) => paw.flag === false);
-
-      if (pawIndex === -1) return;
-      setPawArray([
-        ...pawArray.slice(0, pawIndex),
-        { flag: true },
-        ...pawArray.splice(pawIndex + 1),
-      ]);
-      console.log(pawArray);
-    }, 300);
-  }, [pawArray]);
+      if (pawIndex >= pawArray.length) {
+        if (pawIndex >= pawArray.length + pawArray.length) return;
+        setPawArray([
+          ...pawArray.slice(0, pawIndex - pawArray.length),
+          { flag: false },
+          ...pawArray.slice(pawIndex + 1 - pawArray.length),
+        ]);
+      } else {
+        setPawArray([
+          ...pawArray.slice(0, pawIndex),
+          { flag: true },
+          ...pawArray.slice(pawIndex + 1),
+        ]);
+      }
+      setPawIndex(pawIndex + 1);
+    }, 200);
+  }, [pawArray, pawIndex]);
 
   useEffect(() => {
     displayPaw();
@@ -64,7 +71,7 @@ const SContainer = styled.div`
 `;
 
 const STitle = styled.h2`
-  font-size: 45px;
+  font-size: 50px;
   font-weight: bold;
   letter-spacing: 0.05em;
   font-family: Righteous;

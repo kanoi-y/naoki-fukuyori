@@ -11,9 +11,9 @@ export const Cat: VFC = memo(() => {
     const totalAngle = 72;
 
     const newTailAngle =
-      scrollTop % totalAngle <= (totalAngle - 2) / 2
-        ? -(scrollTop % totalAngle)
-        : (scrollTop % totalAngle) - (totalAngle - 1);
+      scrollTop / 2 % totalAngle <= (totalAngle - 2) / 2
+        ? -(scrollTop / 2 % totalAngle)
+        : (scrollTop / 2 % totalAngle) - (totalAngle - 1);
 
     setTailAngle(newTailAngle);
   }, []);

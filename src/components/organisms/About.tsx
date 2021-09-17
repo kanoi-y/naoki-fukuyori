@@ -1,23 +1,110 @@
 import myIcon from "images/myicon.png";
-import { VFC } from "react";
+import { useState, VFC } from "react";
 import styled from "styled-components";
 
+type ItemType = {
+  top: number;
+  left: number;
+  dir: { up: boolean; right: boolean };
+  readonly size: number;
+};
+
+const itemSizeSm = 85;
+const itemSizeMd = 110;
+const itemSizeLg = 160;
+
 export const About: VFC = () => {
+  // const [itemState1, setItemState1] = useState<ItemType>({
+  //   top: 0,
+  //   left: 0,
+  //   dir: { up: true, right: true },
+  //   size: itemSizeSm,
+  // });
+
+  // const [itemState2, setItemState2] = useState<ItemType>({
+  //   top: 130,
+  //   left: 0,
+  //   dir: { up: true, right: true },
+  //   size: itemSizeLg,
+  // });
+
+  // const [itemState3, setItemState3] = useState<ItemType>({
+  //   top: 350,
+  //   left: 0,
+  //   dir: { up: true, right: true },
+  //   size: itemSizeMd,
+  // });
+
+  // const [itemState4, setItemState4] = useState<ItemType>({
+  //   top: 500,
+  //   left: 0,
+  //   dir: { up: true, right: true },
+  //   size: itemSizeMd,
+  // });
+
+  const [itemStateArr, setItemStateArr] = useState<ItemType[]>([
+    {
+      top: 0,
+      left: 0,
+      dir: { up: true, right: true },
+      size: itemSizeSm,
+    },
+    {
+      top: 130,
+      left: 0,
+      dir: { up: true, right: true },
+      size: itemSizeLg,
+    },
+    {
+      top: 350,
+      left: 0,
+      dir: { up: true, right: true },
+      size: itemSizeMd,
+    },
+    {
+      top: 500,
+      left: 0,
+      dir: { up: true, right: true },
+      size: itemSizeMd,
+    },
+  ]);
+  // const moveItem = () => {};
+
   return (
     <SContainer>
       <STitle>About</STitle>
-      <SItemIcon>
+      <SItemIcon
+        style={{
+          top: `${itemStateArr[0].top}px`,
+          left: `${itemStateArr[0].left}px`,
+        }}
+      >
         <SItemImage>
           <img src={myIcon} alt="カノイのアイコン" />
         </SItemImage>
       </SItemIcon>
-      <SItemBigText>
+      <SItemBigText
+        style={{
+          top: `${itemStateArr[1].top}px`,
+          left: `${itemStateArr[1].left}px`,
+        }}
+      >
         <p>ああああああああああああああああああああああああああ</p>
       </SItemBigText>
-      <SItemSmallText>
+      <SItemSmallText
+        style={{
+          top: `${itemStateArr[2].top}px`,
+          left: `${itemStateArr[2].left}px`,
+        }}
+      >
         <p>ああああああああああ</p>
       </SItemSmallText>
-      <SItemSmallText>
+      <SItemSmallText
+        style={{
+          top: `${itemStateArr[3].top}px`,
+          left: `${itemStateArr[3].left}px`,
+        }}
+      >
         <p>あああああああああああああ</p>
       </SItemSmallText>
     </SContainer>
@@ -29,6 +116,7 @@ const SContainer = styled.div`
   height: 100vh;
   padding-top: 25px;
   box-sizing: border-box;
+  position: relative;
 `;
 
 const STitle = styled.h2`
@@ -43,7 +131,7 @@ const STitle = styled.h2`
 `;
 
 const SItem = styled.div`
-  position: relative;
+  position: absolute;
   background-color: #f2f2f2;
   &::before {
     content: "";

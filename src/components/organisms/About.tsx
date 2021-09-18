@@ -1,11 +1,11 @@
 import myIcon from "images/myicon.png";
-import { useState, VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import styled from "styled-components";
 
 type ItemType = {
   top: number;
   left: number;
-  dir: { up: boolean; right: boolean };
+  dir: { down: boolean; right: boolean };
   readonly size: number;
 };
 
@@ -14,61 +14,92 @@ const itemSizeMd = 110;
 const itemSizeLg = 160;
 
 export const About: VFC = () => {
-  // const [itemState1, setItemState1] = useState<ItemType>({
-  //   top: 0,
-  //   left: 0,
-  //   dir: { up: true, right: true },
-  //   size: itemSizeSm,
-  // });
-
-  // const [itemState2, setItemState2] = useState<ItemType>({
-  //   top: 130,
-  //   left: 0,
-  //   dir: { up: true, right: true },
-  //   size: itemSizeLg,
-  // });
-
-  // const [itemState3, setItemState3] = useState<ItemType>({
-  //   top: 350,
-  //   left: 0,
-  //   dir: { up: true, right: true },
-  //   size: itemSizeMd,
-  // });
-
-  // const [itemState4, setItemState4] = useState<ItemType>({
-  //   top: 500,
-  //   left: 0,
-  //   dir: { up: true, right: true },
-  //   size: itemSizeMd,
-  // });
-
   const [itemStateArr, setItemStateArr] = useState<ItemType[]>([
     {
-      top: 0,
+      top: 20,
       left: 0,
-      dir: { up: true, right: true },
+      dir: { down: true, right: true },
       size: itemSizeSm,
     },
     {
-      top: 130,
+      top: 150,
       left: 0,
-      dir: { up: true, right: true },
+      dir: { down: true, right: true },
       size: itemSizeLg,
     },
     {
-      top: 350,
+      top: 370,
       left: 0,
-      dir: { up: true, right: true },
+      dir: { down: true, right: true },
       size: itemSizeMd,
     },
     {
       top: 500,
       left: 0,
-      dir: { up: true, right: true },
+      dir: { down: true, right: true },
       size: itemSizeMd,
     },
   ]);
-  // const moveItem = () => {};
+
+  // const moveItem = useCallback(() => {
+  //   setTimeout(() => {
+  //     if (window.pageYOffset > 10) return;
+  //     const newItemStateArr: ItemType[] = itemStateArr.map((itemState) => {
+  //       return {
+  //         top: itemState.top + 5,
+  //         left: itemState.top + 5,
+  //         dir: { up: itemState.dir.up, right: itemState.dir.right },
+  //         size: itemState.size,
+  //       };
+  //     });
+  //     setItemStateArr(newItemStateArr);
+  //   }, 100);
+  // }, [itemStateArr]);
+
+  // const setSize = () => {
+  //   setWindowWidth(window.innerWidth);
+  //   setWindowHeight(window.innerHeight);
+  // };
+
+  const moveItem = (item: ItemType): ItemType => {
+    let newTop = item.top;
+    let newLeft = item.left;
+    let newDir = { down: item.dir.down, right: item.dir.right };
+
+    if (0 > newTop || newTop > window.innerHeight - item.size) {
+      newDir.down = !newDir.down;
+    }
+    newDir.down ? (newTop += 3) : (newTop -= 3);
+
+    if (0 > item.left || item.left > window.innerWidth - item.size) {
+      newDir.right = !newDir.right;
+    }
+    newDir.right ? (newLeft += 3) : (newLeft -= 3);
+
+    return {
+      top: newTop,
+      left: newLeft,
+      dir: newDir,
+      size: item.size,
+    };
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // aboutコンポーネントが表示されている間だけ動く
+      if (
+        window.pageYOffset < 10 ||
+        window.pageYOffset > window.innerHeight * 2
+      )
+        return;
+
+      const newItemStateArr: ItemType[] = itemStateArr.map((itemState) => {
+        return moveItem(itemState);
+      });
+      setItemStateArr(newItemStateArr);
+    }, 50);
+    return () => clearInterval(intervalId);
+  }, [itemStateArr]);
 
   return (
     <SContainer>

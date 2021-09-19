@@ -1,5 +1,5 @@
 import myIcon from "images/myicon.png";
-import { useEffect, useState, VFC } from "react";
+import { useCallback, useEffect, useState, VFC } from "react";
 import styled from "styled-components";
 
 type ItemType = {
@@ -30,59 +30,76 @@ export const About: VFC = () => {
     {
       top: 370,
       left: 0,
-      dir: { down: true, right: true },
+      dir: { down: false, right: true },
       size: itemSizeMd,
     },
     {
       top: 500,
       left: 0,
-      dir: { down: true, right: true },
+      dir: { down: false, right: true },
       size: itemSizeMd,
     },
   ]);
 
-  // const moveItem = useCallback(() => {
-  //   setTimeout(() => {
-  //     if (window.pageYOffset > 10) return;
-  //     const newItemStateArr: ItemType[] = itemStateArr.map((itemState) => {
-  //       return {
-  //         top: itemState.top + 5,
-  //         left: itemState.top + 5,
-  //         dir: { up: itemState.dir.up, right: itemState.dir.right },
-  //         size: itemState.size,
-  //       };
-  //     });
-  //     setItemStateArr(newItemStateArr);
-  //   }, 100);
-  // }, [itemStateArr]);
+  const setPosition = useCallback((arr: ItemType[]) => {
+    return arr.map((itemState) => {
+      const randomTop = Math.floor(
+        Math.random() * (window.innerHeight - itemState.size + 1)
+      );
+      const randomLeft = Math.floor(
+        Math.random() * (window.innerWidth - itemState.size + 1)
+      );
+      const randomDown = Math.floor(Math.random() * 2) === 0 ? true : false;
+      const randomRight = Math.floor(Math.random() * 2) === 0 ? true : false;
 
-  // const setSize = () => {
-  //   setWindowWidth(window.innerWidth);
-  //   setWindowHeight(window.innerHeight);
-  // };
+      return {
+        top: randomTop,
+        left: randomLeft,
+        dir: {
+          down: randomDown,
+          right: randomRight,
+        },
+        size: itemState.size,
+      };
+    });
+  }, []);
 
-  const moveItem = (item: ItemType): ItemType => {
-    let newTop = item.top;
-    let newLeft = item.left;
-    let newDir = { down: item.dir.down, right: item.dir.right };
+  const moveItem = (itemArr: ItemType[]): ItemType[] => {
+    return itemArr.map((item) => {
+      let newTop = item.top;
+      let newLeft = item.left;
+      let newDir = { down: item.dir.down, right: item.dir.right };
 
-    if (0 > newTop || newTop > window.innerHeight - item.size) {
-      newDir.down = !newDir.down;
-    }
-    newDir.down ? (newTop += 3) : (newTop -= 3);
+      // 最初から画面外だった時に戻ってこれるように実装しよう
 
-    if (0 > item.left || item.left > window.innerWidth - item.size) {
-      newDir.right = !newDir.right;
-    }
-    newDir.right ? (newLeft += 3) : (newLeft -= 3);
+      if (0 > newTop) {
+        newDir.down = true;
+      }
+      if (newTop > window.innerHeight - item.size) {
+        newDir.down = false;
+      }
+      newDir.down ? (newTop += 3) : (newTop -= 3);
 
-    return {
-      top: newTop,
-      left: newLeft,
-      dir: newDir,
-      size: item.size,
-    };
+      if (0 > item.left) {
+        newDir.right = true;
+      }
+      if (item.left > window.innerWidth - item.size) {
+        newDir.right = false;
+      }
+      newDir.right ? (newLeft += 3) : (newLeft -= 3);
+
+      return {
+        top: newTop,
+        left: newLeft,
+        dir: newDir,
+        size: item.size,
+      };
+    });
   };
+
+  useEffect(() => {
+    setItemStateArr((prevItemStateArr) => setPosition(prevItemStateArr));
+  }, [setPosition]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -93,13 +110,10 @@ export const About: VFC = () => {
       )
         return;
 
-      const newItemStateArr: ItemType[] = itemStateArr.map((itemState) => {
-        return moveItem(itemState);
-      });
-      setItemStateArr(newItemStateArr);
+      setItemStateArr((prev) => moveItem(prev));
     }, 50);
     return () => clearInterval(intervalId);
-  }, [itemStateArr]);
+  }, []);
 
   return (
     <SContainer>
